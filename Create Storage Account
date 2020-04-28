@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+
+        "StorageName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of Storage Account"
+
+            }
+        },
+        "Environment": {
+            "type": "string",
+            "metadata": {
+                "description": "Description of environment"
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "Description": "Description of location"
+
+            }
+
+
+        }
+
+    },
+    "functions": [
+        {
+            "namespace": "contoso",
+            "members": {
+                "uniqueName": {
+                    "parameters": [
+                        {
+                            "name": "namePrefix",
+                            "type": "string"
+                        }
+                    ],
+                    "output": {
+                        "type": "string",
+                        "value": "[concat(toLower(parameters('namePrefix')), uniqueString(resourceGroup().id))]"
+                    }
+                }
+            }
+        }
+    ],
+    
+    "variables": {
+        "Createby": "Name",
+        "Unidad": "Unidad"
+
+    },
+    "resources": [
+        {
+            "name": "[parameters('StorageName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "tags": {
+                "Environment": "[parameters('Environment')]",
+                "Createby": "[variables('Createby')]",
+                "Unidad": "[variables('Unidad')]"
+            },
+            "location": "[parameters('location')]",
+            "kind": "Storage",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+
+            }
+
+        }
+    ],
+    "outputs": {
+
+    }
+}
